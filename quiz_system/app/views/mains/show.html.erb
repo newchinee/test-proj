@@ -1,0 +1,18 @@
+<% provide(:title, 'Please select a Category') %>
+	<h1>Please select a Category</h1>
+	
+	<div id="list4">
+	   <ul>
+	   	  <% @categories.each do |category| %>
+			 <li class="quiz-category">
+			 	<a href="/quiz/category/<%= category.id %>">
+			 	  <dl>
+			 		<dt><%= category.name %></dt>
+			 		<dd>&nbsp;</dd>
+			 	  <dl>
+			 	</a>
+			 </li>
+		  <% end %>
+	   </ul>
+	</div>
+

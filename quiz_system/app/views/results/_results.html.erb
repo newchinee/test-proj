@@ -1,0 +1,49 @@
+<%= hidden_field_tag :direction, params[:direction] %>
+<%= hidden_field_tag :sort, params[:sort] %>
+<%= will_paginate %>
+<table class="list_table" id="results_list">
+	<thead>
+		<tr>
+			<th><%= sortable Result, "id", "ID" %></th>
+			<th><%= sortable Result, "quizzes.name", "Quiz" %></th>
+			<% if admin_user_signed_in? %>
+				<th><%= sortable Result, "users.first_name", "User" %></th>
+			<% end %>
+			<th><%= sortable Result, "start_time" %></th>
+			<th><%= sortable Result, "time_taken" %></th>
+			<th><%= sortable Result, "marks" %></th>
+			<th><%= sortable Result, "comment" %></th>
+			<th><%= sortable Result, "retry_count", "Retry" %></th>
+			<th><%= sortable Result, "status", "Status" %></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for result in @results %>
+			<tr>
+				<td><%= link_to result.id, result %></td>
+				<td><%= link_to truncate(result.quiz.name, :length => 20), quiz_path(result.quiz_id) %></td>
+				<% if admin_user_signed_in? %>
+					<td><%= link_to "#{result.user.first_name} #{result.user.last_name}", user_path(result.user_id) %></td>
+				<% end %>
+				<td><%= l result.start_time, :format => :long %></td>
+				<td><%= result.status == Result::STATUS_ENDED ? convert_duration(result.time_taken) : "NA" %></td>
+				<td><%= "#{result.marks}%" %></td>
+				<td><%= truncate(result.comment, :length => 20) %></td>
+				<td><%= result.retry_count %></td>
+				<td><%= convert_status(result.status, result.marks) %></td>
+				<td>
+					<%= link_to raw("<i class=\"icon-eye-open\"></i>"), result %>
+					<% if admin_user_signed_in? %>
+						<%= link_to raw("<i class=\"icon-pencil\"></i>"), edit_result_path(result) %> 
+						<%= link_to raw("<i class=\"icon-remove\"></i>"), result, method: :delete, data: { confirm: "You sure?" } %>
+					<% else %>
+						<%= link_to raw("<i class=\"icon-repeat\"></i>"), quizaction_main_path(result, :task => "restart") if result.status == Result::STATUS_ENDED %> 
+						<%= link_to raw("<i class=\"icon-pencil\"></i>"), quizaction_main_path(result, :task => "continue") if result.status == Result::STATUS_PAUSE %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<%= will_paginate %>

@@ -1,0 +1,120 @@
+
+<script type="text/javascript">
+	$(document).ready(function() { 
+	 	$('#div_answer').hide();
+	 	$('#btn_submit').hide();
+	 	selected_answer();
+	 	
+		$('#list4 li').live('mouseover mouseout', function(event) {
+		  if (event.type == 'mouseover') {
+			$(this).addClass("hover");
+		  } else {
+			$(this).removeClass("hover");
+		  }
+		});
+		
+		
+		$('#list4 li').click( function(){
+		    $('li.selected').removeClass('selected');
+		    $(this).addClass('selected');
+		    $(this).children("input:radio").attr("checked","checked");
+		});
+		
+		$('#btn_answer').click(function() {
+			answer(1);
+		})
+
+		// countDownBySeconds(<%= @time_left %>);
+	});
+	
+	function selected_answer(){
+		var question_id = $('input[name=question_id]').val();
+		$.get("/ajax/getselectedanswer", { question_id: question_id},
+		function(data) {
+			if(data.selected_answer){
+				$('[name=sample-radio][value="'+ data.selected_answer +'"]').prop('checked',true);
+				answer(0);
+			} else {
+				answer(0);
+			}
+			
+		});
+	}
+	
+	function answer(isClick){
+		var question_id = $('input[name=question_id]').val();
+		var val = $("input[name='sample-radio']:checked").val();
+		
+		$.get("/ajax/getanswer", { question_id: question_id, user_answer: val},
+		function(data) {
+			var answer = data.answer;
+			$('#correct_answer').html(data.name);
+			$('#correct_explanation').html(data.explanation);
+						
+			var radio_answers = $("input:radio[name='sample-radio']");
+		  	if(radio_answers.is(":checked")){
+		  		
+		  		$("input[name='sample-radio']:checked").parent().addClass('selected');
+		  		
+				if(val == answer){
+					$('#div_image img:first-child').attr('src','/assets/right.jpg');
+				} else {
+					$('#div_image img:first-child').attr('src','/assets/wrong.jpg');
+				}
+				$('#div_answer').hide().slideDown('slow');
+				$('#btn_answer').hide();
+				$('#btn_submit').fadeIn();
+				
+		  	} else {
+		  		if(isClick)
+		  			$('#div_error').html('Please select an answer');
+		  	}
+		});
+	}
+	
+	function countDownBySeconds(time) {
+		$('#quizTimeCountdown').countdown({until: +time, compact: true, format: 'HMS', onExpiry: quizTimeout});
+	}
+	
+	function quizTimeout() {
+		alert("Time out");
+	}
+</script>
+
+<% provide(:title, 'Quiz') %>
+	<h1><%= @quiz.name %></h1>
+<!-- 	<div id="quizTimeCountdown"></div> -->
+	<div class="center"><%= button_to "Save and Exit", mains_pause_path(id: @quiz_id), class: "btn btn-large btn-primary" %></div>
+	<%= form_tag @action do -%>
+	<input type="hidden" name="offset" value="<%= @next %>" />
+	<input type="hidden" name="quiz_id" value="<%= @quiz_id %>" />
+	<input type="hidden" name="time_left" value="<%= @time_left %>" />
+	<% if @no_question > 0 %>
+	<h2>
+		<% @questions.each do |question| %>
+		<%= question.name %>
+		<input type="hidden" name="question_id" value="<%= question.id %>" />
+		<% end %>
+	</h2>
+	<div id="list4">
+	   <ul>
+	   	  <% @answers.each do |answer| %>
+	      	<li><input name="sample-radio" id="sample-radio" value="<%= answer.id %>" type="radio" /><strong>&nbsp;<%= answer.name %></strong></li>
+	      <% end %>
+	   </ul>
+	</div>
+	<div id="div_error"></div>
+	<div id="div_answer">
+		<div id="div_image" class="left "><img src="/assets/right.jpg" width="100px" height="100px" /></div>
+		<div id="div_explanation" class="left explanation">
+			<strong>Answer : <span id="correct_answer"><%= @correct_answer %></span></strong><br />
+			<p><span id="correct_explanation"><%= @correct_explanation %></span></p>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div id="div_actions">
+		<input type="button" value="Submit" name="submit" class="btn btn-large btn-primary" id="btn_answer">
+		<input type="submit" value="<%= @submit %>" name="submit" class="btn btn-large btn-primary" id="btn_submit">
+	</div>
+	<% end %>
+	<% end -%>

@@ -1,0 +1,48 @@
+<div class="row">
+	<div class="span8 offset1">
+
+<div class="field">
+  <div class="row">
+    <div class="span2">
+      <%= f.label :name, "Answer" %>
+    </div>
+    <div class="span6">
+      <%= f.text_field :name%>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span2 correct_answer">
+      <%= f.label :correct_flag, "Is Correct Answer" %>
+    </div>
+    <div class="span3">
+      <%= f.hidden_field :correct_flag, :class => "answer_correct_flag" %>
+      <% if(param.correct_flag == true) %>
+      	<%= button_to_function "Set as Correct Answer", "set_correct_answer(this)", :class => "btn btn-small active btn-success" %><br />
+      <% else %>
+      	<%= button_to_function "Set as Correct Answer", "set_correct_answer(this)", :class => "btn btn-small" %><br />
+      <% end %>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="span2">
+      <%= f.label :score %>
+    </div>
+    <div class="span3">
+      <%= f.number_field :score %>
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="span2">
+      <%= f.label :explanation %>
+    </div>
+    <div class="span6">
+      <%= f.text_area :explanation, :rows => 3 %>
+    </div>
+  </div>
+  
+  <%= f.hidden_field :_destroy %>
+  <%= button_to_function "Remove Answer", "remove_answer(this)", :class => "btn btn-warning btn-medium" %><br />
+</div>
+
+	</div>
+</div>

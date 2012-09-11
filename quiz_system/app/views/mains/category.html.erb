@@ -1,0 +1,68 @@
+
+<script type="text/javascript">
+	$(document).ready(function() { 
+		$('#list4 li').live('mouseover mouseout', function(event) {
+		  if (event.type == 'mouseover') {
+			$(this).addClass("hover");
+		  } else {
+			$(this).removeClass("hover");
+		  }
+		});	
+	});
+</script>
+
+<% provide(:title, 'Please select a Quiz') %>
+
+<% if @quizzes.count > 0 %>
+	<h1>Please select a Quiz</h1>	
+	<div id="list4">
+	   <ul>
+	   	  <% @quizzes.each do |quiz| %>
+			 <li class="quiz-category">
+			 	<dl>
+			 		<dt><%= quiz.name %></dt>
+			 		<dd>&nbsp;
+			 			<% 
+			 				@results = Result.find(
+						        :all,
+						        :conditions => ["user_id = ? and quiz_id = ?", current_user.id, quiz.id],
+						        :limit => 1
+						      )
+						      
+						    if !@results.blank?
+						    	@results.each do |result|
+							    	offset = UserAnswer.count(
+								        :all,
+								        :conditions => ["user_id = ? and quiz_id = ? and completed_flag = ?", current_user.id, quiz.id, false],
+								      )
+								    if result.status < 2 and offset > 0 
+			 			%>
+										<%= button_to "Continue", "/mains/quiz/#{quiz.id}?offset=#{offset}", :class => "btn btn-primary" %>
+										<%= button_to "Restart", "/mains/quiz/#{quiz.id}", :class => "btn btn-primary", :method => :get %>
+									<% elsif result.status == 2 %>
+										<%= button_to "Restart", "/mains/quiz/#{quiz.id}", :class => "btn btn-primary", :method => :get %>
+									<% else %>
+										<%= button_to "Start", "/mains/quiz/#{quiz.id}", :class => "btn btn-primary", :method => :get %>
+									<% end %>
+								<% end %>
+							<% else %>
+								<%= button_to "Start", "/mains/quiz/#{quiz.id}", :class => "btn btn-primary", :method => :get %>
+							<% end %>
+			 			
+			 		</dd>
+			 	</dl>
+			 </li>
+		  <% end %>
+	   </ul>
+	</div>
+	<% else %>
+	<div id="list4">
+	<h3>
+		No quiz found, please select other category
+	</h3>
+	</div>
+	<br />
+	<center>
+		<%= link_to "Back", {:controller => "mains", :action => "index"},  :class=> "btn btn-large" %>
+	</center>
+<% end %>

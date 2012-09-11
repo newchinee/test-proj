@@ -1,0 +1,30 @@
+<%= hidden_field_tag :direction, params[:direction] %>
+<%= hidden_field_tag :sort, params[:sort] %>
+<%= will_paginate %>
+<table class="list_table" id="admin_users_list">
+	<thead>
+		<tr>
+			<th><%= sortable AdminUser, "first_name" %></th>
+			<th><%= sortable AdminUser, "last_name" %></th>
+			<th><%= sortable AdminUser, "email" %></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for admin_user in @admin_users %>
+			<tr>
+				<td><%= admin_user.first_name %></td>
+				<td><%= admin_user.last_name %></td>
+				<td><%= admin_user.email %></td>
+				<td>
+					<%= link_to raw("<i class=\"icon-eye-open\"></i>"), admin_user %>
+					<%= link_to raw("<i class=\"icon-pencil\"></i>"), edit_admin_user_path(admin_user) %> 
+					<% if admin_user.id != current_admin_user.id %>
+						<%= link_to raw("<i class=\"icon-remove\"></i>"), admin_user, method: :delete, data: { confirm: "You sure?" } %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<%= will_paginate %>

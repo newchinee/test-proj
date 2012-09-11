@@ -1,0 +1,18 @@
+<% provide(:title, "Profile (#{@user.first_name} #{@user.last_name})") %>
+<h1>User profile</h1>
+<div class="row">
+  <div class="span6 offset3">
+	<p>First Name: <%= @user.first_name %></p>
+	<p>Last Name: <%= @user.last_name %></p>
+	<p>Email: <%= @user.email %></p>
+	
+	<%= link_to edit_user_path, class: "btn btn-large btn-primary" do %>
+		<i class="icon-pencil icon-white"></i><span class="button_text"> Edit</span>
+	<% end %>
+	<% if admin_user_signed_in? %>
+		<%= link_to @user, method: :delete, class: "btn btn-large btn-primary" do %>
+			<i class="icon-remove icon-white"></i><span class="button_text"> Delete</span>
+		<% end %>
+	<% end %>
+  </div>
+</div>

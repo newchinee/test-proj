@@ -1,0 +1,16 @@
+<% provide(:title, 'All quizzes') %>
+<h1>All quizzes</h1>
+
+<%= link_to new_quiz_path, class: "btn btn-large btn-primary" do %>
+		<i class="icon-plus icon-white"></i><span class="button_text"> Add</span>
+<% end %>
+
+<br /><br />
+
+<%= form_tag quizzes_path, :method => 'get', :id => "quizzes_search", :class => "search_form" do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+  <div id="quizzes"><%= render 'quizzes' %></div>
+<% end %>

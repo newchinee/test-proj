@@ -1,0 +1,43 @@
+<div class="question">
+	<h4>Question</h4><br/>
+	<div class="row">
+		<div class="span8 offset1">
+
+
+<div class="field">
+  <div class="row">
+    <div class="span2">
+      <%= f.label :name, "Question" %>
+    </div>
+    <div class="span6">
+      <%= f.text_field :name%>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span2">
+      <%= f.label :score %>
+    </div>
+    <div class="span3">
+      <%= f.number_field :score %>
+    </div>
+  </div>  
+  
+  <br/>
+  
+  <% param.answers.each do |answer| %>
+    <% if(answer.deleted_flag == false) %>
+      <%= f.fields_for :answers, answer do |builder| %>
+	    <%= render 'answer_fields', :f => builder, :param => answer %>
+      <% end %>
+    <% end %>
+  <% end %>
+  
+  <%= button_to_add_fields "Add Andswer", f, :answers %> 
+  <%= f.hidden_field :_destroy %>
+  <%= button_to_function "Remove Question", "remove_question(this)", :class => "btn btn-warning btn-danger" %><br/>
+</div>
+
+		</div>
+	</div>
+</div>
+<br/>

@@ -1,0 +1,17 @@
+<% provide(:title, 'All admins') %>
+<h1>All admins</h1>
+
+<%= link_to new_admin_user_path, class: "btn btn-large btn-primary" do %>
+		<i class="icon-plus icon-white"></i><span class="button_text"> Add</span>
+<% end %>
+
+<br /><br />
+
+<%= form_tag admin_users_path, :method => 'get', :id => "admin_users_search", :class => "search_form" do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+  <div id="admin_users"><%= render 'admin_users' %></div>
+<% end %>
+

@@ -1,0 +1,21 @@
+<% provide(:title, 'All results') %>
+<h1>All results</h1>
+
+<%= form_tag results_path, :method => 'get', :id => "results_search", :class => "search_form" do %>
+  <p>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+  <% if admin_user_signed_in? %>
+  <p>
+    <%= select_tag :filter_user, options_for_select(@filter_user, params[:filter_user]) %>
+    <%= submit_tag "Filter by user" %>
+  </p>
+  <% end %>
+  <p>
+    <%= select_tag :filter_quiz, options_for_select(@filter_quiz, params[:filter_quiz]) %>
+    <%= submit_tag "Filter by quiz" %>
+  </p>
+
+  <div id="results"><%= render 'results' %></div>
+<% end %>

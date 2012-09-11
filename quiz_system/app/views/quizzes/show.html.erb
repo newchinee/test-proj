@@ -1,0 +1,66 @@
+<div class="row">
+	<div class="span11 offset3">
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Quiz name:</b>
+  <%= @quiz.name %>
+  <% if(!@quiz.completed) %>
+  	<span class="label label-warning">Incomplete!</span>
+  <% end %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @quiz.description %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @quiz.category_name %>
+</p>
+
+<p>
+  <b>Time allowed</b>
+  <%= "#{@quiz.time_allowed / 60} hours  #{@quiz.time_allowed % 60} minutes"  %>
+</p>
+
+<% if admin_user_signed_in? %>
+	<p>
+	  <b>Questions randomized:</b>
+	  <%= @quiz.random_flag %>
+	</p>
+	
+	<p>
+	  <b>Maximum number of question:</b>
+	  <%= @quiz.max_question %>
+	</p>
+	
+	<p>
+	  <b>Questions:</b>
+	  <ol> 
+	    <% @quiz.questions.where(:deleted_flag => false).each do |question| %>
+	      <li><%= question.name %></li>
+	      
+	      <ul> 
+	        <% question.answers.where(:deleted_flag => false).each do |answer| %>
+	          <li><%= answer.name %></li>  
+	        <% end %>
+	      </ul>
+	 
+	      <br/>
+	    <% end %>
+	  </ol>
+	</p>
+	
+	<%= link_to 'Edit', edit_quiz_path(@quiz) %> |
+	<%= link_to 'Back', quizzes_path %>
+<% else %>
+	<%= link_to 'Back', results_path(current_user) %>
+<% end %>
+
+
+
+	</div>
+</div>

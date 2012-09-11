@@ -1,0 +1,91 @@
+<div class="row">
+	<div class="span11 offset2">
+
+<%= form_for(@quiz) do |f| %>
+  <% if @quiz.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@quiz.errors.count, "error") %> prohibited this quiz from being saved:</h2>
+
+      <ul>
+      <% @quiz.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="span2">
+      <%= f.label :name, "Quiz Name" %><br />
+    </div>
+    <div class="span6">
+      <%= f.text_field :name %>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span2">
+      <%= f.label :description %><br />
+    </div>
+    <div class="span6">
+      <%= f.text_area :description, :rows => 3 %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span2">
+      <%= f.label :category_id %><br />
+    </div>
+    <div class="span6">
+      <%= select(:quiz, :category_id, Category.all.collect {|c| [ c.name, c.id ] }, {:include_blank => 'None'}) %>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="span2">
+      <%= f.label :time_allowed %><br />
+    </div>
+    <div class="span7">
+      <%= number_field_tag :hours_allowed, (@quiz.time_allowed / 60), :in => 0..10, :class => "input-small" %> hours  
+      <%= number_field_tag :minutes_allowed, (@quiz.time_allowed % 60), :in => 0..59, :class => "input-small" %> minutes
+    </div>
+  </div>
+  <div class="row">
+    <div class="span2">
+      <%= f.label :max_question, "Maximum Number of Questions" %><br />
+    </div>
+    <div class="span3">
+      <%= f.number_field :max_question %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span2">
+      <%= f.label :random_flag, "Randomize Questions" %>
+    </div>
+    <div class="span3">
+      <%= f.check_box :random_flag %>
+    </div>
+  </div>
+  
+  <br/>
+
+  <% @quiz.questions.each do |question| %>
+  	<% if(question.deleted_flag == false) %>
+	  <%= f.fields_for :questions, question do |builder| %>
+		<%= render 'question_fields', :f => builder, :param => question %>
+	  <% end %>
+	<% end %>
+  <% end %>
+  
+  <%= button_to_add_fields "Add Question", f, :questions %>
+  
+  <div class="actions">
+  	<% if(@method == 'new') %>
+  	  <%= f.submit 'Create Quiz', :class => "btn btn-primary btn-large" %>
+  	<% else %>
+  	  <%= f.submit 'Update Quiz', :class => "btn btn-primary btn-large" %>
+  	<% end %>
+  </div>
+<% end %>
+
+	</div>
+</div>

@@ -1,0 +1,26 @@
+<%= hidden_field_tag :direction, params[:direction] %>
+<%= hidden_field_tag :sort, params[:sort] %>
+<%= will_paginate %>
+<table class="list_table" id="categories_list">
+	<thead>
+		<tr>
+			<th><%= sortable Category, "name", "Category" %></th>
+			<th><%= sortable Category, "description" %></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for category in @categories %>
+			<tr>
+				<td><%= category.name %></td>
+				<td><%= category.description %></td>
+				<td>
+					<%= link_to raw("<i class=\"icon-eye-open\"></i>"), category %>
+					<%= link_to raw("<i class=\"icon-pencil\"></i>"), edit_category_path(:id=>category.id) %> 
+					<%= link_to raw("<i class=\"icon-remove\"></i>"), category, method: :delete, data: { confirm: "You sure?" } %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<%= will_paginate %>

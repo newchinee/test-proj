@@ -1,0 +1,28 @@
+<%= hidden_field_tag :direction, params[:direction] %>
+<%= hidden_field_tag :sort, params[:sort] %>
+<%= will_paginate %>
+<table class="list_table" id="users_list">
+	<thead>
+		<tr>
+			<th><%= sortable User, "first_name" %></th>
+			<th><%= sortable User, "last_name" %></th>
+			<th><%= sortable User, "email" %></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for user in @users %>
+			<tr>
+				<td><%= user.first_name %></td>
+				<td><%= user.last_name %></td>
+				<td><%= user.email %></td>
+				<td>
+					<%= link_to raw("<i class=\"icon-eye-open\"></i>"), user %>
+					<%= link_to raw("<i class=\"icon-pencil\"></i>"), edit_user_path(user) %> 
+					<%= link_to raw("<i class=\"icon-remove\"></i>"), user, method: :delete, data: { confirm: "You sure?" } %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<%= will_paginate %>

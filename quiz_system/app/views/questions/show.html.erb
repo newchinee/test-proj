@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Detail:</b>
+  <%= @question.detail %>
+</p>
+
+<p>
+  <b>Quiz:</b>
+  <%= @question.quiz_id %>
+</p>
+
+<p>
+  <b>Score integer:</b>
+  <%= @question.score_integer %>
+</p>
+
+<p>
+  <b>Deleted flag:</b>
+  <%= @question.deleted_flag %>
+</p>
+
+
+<%= link_to 'Edit', edit_question_path(@question) %> |
+<%= link_to 'Back', questions_path %>

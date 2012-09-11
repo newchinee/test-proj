@@ -1,0 +1,48 @@
+<%= hidden_field_tag :direction, params[:direction] %>
+<%= hidden_field_tag :sort, params[:sort] %>
+<%= will_paginate %>
+<table class="list_table" id="quizzes_list">
+	<thead>
+		<tr>
+			<th><%= sortable Quiz, "name" %></th>
+			<th><%= sortable Quiz, "description" %></th>
+			<th><%= sortable Quiz, "categories.name", "Category" %></th>
+			<th><%= sortable Quiz, "time_allowed" %></th>
+			<th><%= sortable Quiz, "max_question" %></th>
+			<th><%= sortable Quiz, "random_flag", "Random" %></th>
+			<th><%= sortable Quiz, "completed", "Status" %></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% for quiz in @quizzes %>
+			<tr>
+				<td><%= truncate(quiz.name, :length => 30) %></td>
+				<td><%= truncate(quiz.description, :length => 30) %></td>
+				<td><%= truncate(quiz.category_name, :length => 30) %></td>
+				<td><%= "#{quiz.time_allowed / 60}h #{quiz.time_allowed % 60}m" %></td>
+				<td><%= quiz.max_question %></td>
+				<td>
+					<% if(quiz.random_flag) %>
+						<%= raw("<i class=\"icon-ok-sign\"></i>") %>
+					<% else %>
+						<%= raw("<i class=\"icon-remove-sign\"></i>") %>
+					<% end %>
+				</td>
+				<td>
+				  <% if(!quiz.completed) %>
+				    <span class="label label-warning">Incomplete!</span>
+				  <% else %>
+				  	<span class="label label-success">OK</span>
+				  <% end %>
+				</td>
+				<td>
+					<%= link_to raw("<i class=\"icon-eye-open\"></i>"), quiz %>
+					<%= link_to raw("<i class=\"icon-pencil\"></i>"), edit_quiz_path(:id=>quiz.id) %> 
+					<%= link_to raw("<i class=\"icon-remove\"></i>"), quiz, method: :delete, data: { confirm: "You sure?" } %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<%= will_paginate %>

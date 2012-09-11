@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Detail:</b>
+  <%= @answer.detail %>
+</p>
+
+<p>
+  <b>Question:</b>
+  <%= @answer.question_id %>
+</p>
+
+<p>
+  <b>Correct flag:</b>
+  <%= @answer.correct_flag %>
+</p>
+
+<p>
+  <b>Score:</b>
+  <%= @answer.score %>
+</p>
+
+<p>
+  <b>Explanation:</b>
+  <%= @answer.explanation %>
+</p>
+
+<p>
+  <b>Deleted flag:</b>
+  <%= @answer.deleted_flag %>
+</p>
+
+
+<%= link_to 'Edit', edit_answer_path(@answer) %> |
+<%= link_to 'Back', answers_path %>

@@ -1,0 +1,32 @@
+<% provide(:title, "View Result") %>
+<h1>View Result</h1>
+<div class="row">
+  <div class="span6 offset3">
+  	<p><b>ID:</b> <%= @result.id %></p>
+  	<% if admin_user_signed_in? %>
+  		<p><b>User:</b> <%= link_to "#{@result.user.first_name} #{@result.user.last_name}", user_path(@result.user_id) %></p>
+  		<p><b>Quiz:</b> <%= link_to @result.quiz.name, quiz_path(@result.quiz_id) %></p>
+  	<% else %>
+  		<p><b>User:</b> <%= "#{@result.user.first_name} #{@result.user.last_name}" %></p>
+  		<p><b>Quiz:</b> <%= @result.quiz.name %></p>
+  	<% end %>
+  	<p><b>Start time:</b> <%= l @result.start_time, :format => :long %></p>
+	<p><b>End time:</b> <%= @result.status == Result::STATUS_ENDED ? (l @result.end_time, :format => :long) : "NA" %></p>
+	<p><b>Time taken:</b> <%= @result.status == Result::STATUS_ENDED ? @result.time_taken : "NA" %></p>
+	<p><b>Marks:</b> <%= "#{@result.marks}%" %></p>
+	<p><b>Comment:</b> <%= @result.comment %></p>
+	<p><b>Retry count:</b> <%= @result.retry_count %></p>
+	
+	<% if admin_user_signed_in? %>
+		<%= link_to edit_result_path, class: "btn btn-large btn-primary" do %>
+			<i class="icon-pencil icon-white"></i><span class="button_text"> Edit</span>
+		<% end %>
+		<%= link_to @result, method: :delete, class: "btn btn-large btn-primary" do %>
+			<i class="icon-remove icon-white"></i><span class="button_text"> Delete</span>
+		<% end %>
+	<% end %>
+		<%= link_to results_path, class: "btn btn-large btn-primary" do %>
+			<span class="button_text">Back</span>
+		<% end %>
+	</div>
+</div>
